@@ -1,6 +1,15 @@
 import { useState } from 'react'
 import './App.css'
 
+function createTask(id: number, description: string){
+	let task = {
+		id: id,
+		description: description
+	}
+
+	return task
+}
+
 function List(){
 	const [tasks, setTasks] = useState([])
 
