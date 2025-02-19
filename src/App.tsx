@@ -15,12 +15,21 @@ function createTask(id: number, description: string){
 	return task
 }
 
-function List(props: { list: Task[] }){
+function List(props: { list: Task[], setTaskList: Function}){
 
 	return(
 		<div>
 			<ul>
-				{props.list.map( value => <li key={value.id}><input defaultValue={value.description} type="text"/></li> )}	
+				{props.list.map( value => <li key={value.id}>
+					<input defaultValue={value.description} type="text"/>
+					<input onClick={() => {
+						let updatedList = props.list
+
+						updatedList = updatedList.filter(task => task.id !== value.id)
+						props.setTaskList(updatedList)
+					}}
+					value="remove" type='button'/>
+				</li> )}	
 			</ul>
 		</div>
 	)
@@ -36,16 +45,12 @@ function App() {
 		<input defaultValue="Add task" type="button" onClick={(_target) => {
 			const doc = (document.querySelector("#newTaskField") as HTMLInputElement);
 			const updatedTasks = tasks.slice();
-
-			console.debug(updatedTasks.length)
-
 			const newTaskId: number = updatedTasks.length === 0 ? 0 : updatedTasks.at(-1)!.id + 1
 			
 			updatedTasks.push(createTask( newTaskId, doc.value ));
-			console.debug(updatedTasks)
 			setTasks(updatedTasks);
 		}}/>
-		<List list={tasks}/>
+		<List list={tasks} setTaskList={setTasks}/>
 	</div>
     </>
   )
