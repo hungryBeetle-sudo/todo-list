@@ -1,8 +1,13 @@
 import { useState } from 'react'
 import './App.css'
 
+interface Task{
+	id: number
+	description: string
+}
+
 function createTask(id: number, description: string){
-	let task = {
+	let task: Task = {
 		id: id,
 		description: description
 	}
@@ -10,7 +15,7 @@ function createTask(id: number, description: string){
 	return task
 }
 
-function List(props: { list }){
+function List(props: { list: Task[] }){
 
 	return(
 		<div>
@@ -22,16 +27,22 @@ function List(props: { list }){
 }
 
 function App() {
-	const [tasks, setTasks] = useState([])
+	const [tasks, setTasks] = useState(Array<Task>)
 
   return (
     <>
 	<div>
 		<input id="newTaskField" defaultValue="" type="text"/>
-		<input defaultValue="Add task" type="button" onClick={(target) => {
-			const doc = document.querySelector("#newTaskField");
+		<input defaultValue="Add task" type="button" onClick={(_target) => {
+			const doc = (document.querySelector("#newTaskField") as HTMLInputElement);
 			const updatedTasks = tasks.slice();
-			updatedTasks.push(createTask( updatedTasks.at(-1).id + 1, doc.value ));
+
+			console.debug(updatedTasks.length)
+
+			const newTaskId: number = updatedTasks.length === 0 ? 0 : updatedTasks.at(-1)!.id + 1
+			
+			updatedTasks.push(createTask( newTaskId, doc.value ));
+			console.debug(updatedTasks)
 			setTasks(updatedTasks);
 		}}/>
 		<List list={tasks}/>
