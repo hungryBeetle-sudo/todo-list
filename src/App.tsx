@@ -7,7 +7,7 @@ interface Task{
 }
 
 function createTask(id: number, description: string){
-	let task: Task = {
+	const task: Task = {
 		id: id,
 		description: description
 	}
@@ -15,7 +15,7 @@ function createTask(id: number, description: string){
 	return task
 }
 
-function List(props: { list: Task[], setTaskList: Function}){
+function List(props: { list: Task[], setTaskList: (tasks: Task[]) => void}){
 
 	return(
 		<div>
@@ -28,7 +28,7 @@ function List(props: { list: Task[], setTaskList: Function}){
 						updatedList = updatedList.filter(task => task.id !== value.id)
 						props.setTaskList(updatedList)
 					}}
-					value="remove" type='button'/>
+					className="removeButton" value="Remove" type='button'/>
 				</li> )}	
 			</ul>
 		</div>
@@ -41,14 +41,15 @@ function App() {
   return (
     <>
 	<div>
-		<input id="newTaskField" defaultValue="" type="text"/>
-		<input defaultValue="Add task" type="button" onClick={(_target) => {
+		<input id="newTaskField" placeholder="ex: Check e-mail box" spellCheck={true} defaultValue="" type="text"/>
+		<input className="addTaskButton" defaultValue="Add task" type="button" onClick={() => {
 			const doc = (document.querySelector("#newTaskField") as HTMLInputElement);
 			const updatedTasks = tasks.slice();
 			const newTaskId: number = updatedTasks.length === 0 ? 0 : updatedTasks.at(-1)!.id + 1
 			
 			updatedTasks.push(createTask( newTaskId, doc.value ));
 			setTasks(updatedTasks);
+			doc.value = "";
 		}}/>
 		<List list={tasks} setTaskList={setTasks}/>
 	</div>
