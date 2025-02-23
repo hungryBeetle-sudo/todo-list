@@ -38,6 +38,16 @@ function List(props: { list: Task[], setTaskList: (tasks: Task[]) => void}){
 function App() {
 	const [tasks, setTasks] = useState(Array<Task>)
 
+	function updateTask(taskList: Array<Task>){
+		const newTaskList: Array<Task> = []
+
+		for(let i = 0; i < taskList.length; i++){
+			taskList[i].id = i
+			newTaskList.push(taskList[i])
+		}
+		setTasks(newTaskList)
+	}
+
   return (
     <>
 	<div>
@@ -48,10 +58,10 @@ function App() {
 			const newTaskId: number = updatedTasks.length === 0 ? 0 : updatedTasks.at(-1)!.id + 1
 			
 			updatedTasks.push(createTask( newTaskId, doc.value ));
-			setTasks(updatedTasks);
+			updateTask(updatedTasks);
 			doc.value = "";
 		}}/>
-		<List list={tasks} setTaskList={setTasks}/>
+		<List list={tasks} setTaskList={updateTask}/>
 	</div>
     </>
   )
